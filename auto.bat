@@ -1,0 +1,1 @@
+nvcc -V && nvcc kernel.cu -o k -arch=sm_61 -allow-unsupported-compiler && k
