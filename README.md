@@ -4,9 +4,11 @@ This repository aims to collect and develop fast CUDA kernels
 
 ---
 
-## CUDA Archtecture
+## CUDA Hierarchy
 
-![arch mem model](images/cudamemmodel-cudabook-Kirk.jpg)
+CUDA hierarchy is a software abstraction, meaning it doesn't represent the hardware's physical layout. It's a way to conceptualize and manage parallel computations on the GPU.
+
+![hierarchy mem model](images/cudamemmodel-cudabook-Kirk.jpg)
 
 **CUDA cores (hardware)**
 
@@ -225,3 +227,37 @@ GPUs win by **throwing parallelism at the problem**.
 * **SM**: runs and schedules warps
 
 If you understand **warps**, everything else makes sense.
+
+---
+### CUDA Concepts
+
+
+
+`__shared__` memory is per block
+
+Threads in one block can cooperate
+
+Threads in different blocks cannot
+
+Therefore: a single kernel cannot compute a global dot product in one pass
+
+
+
+`__syncthreads()` only synchronizes within a block
+
+
+`warp-shuffle`
+
+Warp shuffle refers to CUDA instructions that allow threads inside the same warp to directly read registers from other threads in that warp.
+- Writing to shared memory
+- Synchronizing
+- Reading back
+
+You can directly move values between registers across threads.
+
+This is:
+- Faster than shared memory
+- No explicit __syncthreads() needed
+- Low latency
+
+`__shfl_down_sync` is a CUDA intrinsic that performs a warp shuffle operation, shifting values "down" across threads.
