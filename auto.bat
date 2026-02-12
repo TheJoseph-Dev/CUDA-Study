@@ -1,1 +1,1 @@
-nvcc -V && nvcc kernel.cu -o k -arch=sm_61 -allow-unsupported-compiler && k
+nvcc -V && nvcc kernel.cu -o k -arch=sm_61 -allow-unsupported-compiler -Wno-deprecated-gpu-targets && k

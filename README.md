@@ -4,6 +4,37 @@ This repository aims to collect and develop fast CUDA kernels
 
 ---
 
+## Parallelism Theory
+
+Parallel algorithms have two costs:
+
+**Work** $\Rightarrow$ total operations performed (like CPU Big-O)
+
+**Depth (span)** $\Rightarrow$ longest dependency chain
+
+A good parallel algorithm:
+- keeps work $\approx O(N)$ 
+- reduces depth $\approx O(\log N)$
+
+> [!Insight]
+>
+> Prefix Sum
+>
+> Sequential definition:
+>
+> `prefix[i] = prefix[i-1] + a[i]`
+>
+> This creates a chain of length $N$
+> 
+> Parallel definition:
+>
+> You restructure dependencies so that each element depends on $\log N$ partial sums
+>
+> That's how you reduce depth. 
+>
+> Thus, the key GPU trick is always to **reduce dependency graph**. Not to parallelize the obvious formulation. 
+
+
 ## CUDA Hierarchy
 
 CUDA hierarchy is a software abstraction, meaning it doesn't represent the hardware's physical layout. It's a way to conceptualize and manage parallel computations on the GPU.
@@ -261,3 +292,17 @@ This is:
 - Low latency
 
 `__shfl_down_sync` is a CUDA intrinsic that performs a warp shuffle operation, shifting values "down" across threads.
+
+## References
+
+https://developer.nvidia.com/gpugems/gpugems3/part-vi-gpu-computing/chapter-39-parallel-prefix-sum-scan-cuda
+
+- Hillis and Steele scan
+- Blelloch scan
+- Brent-Kung Algorithm
+- Kogge-Stone Algorithm
+
+## Next Topics
+
+- Parallel Sorting
+- Parallel DP (like KS, or Git diff LCS) and recurrences
